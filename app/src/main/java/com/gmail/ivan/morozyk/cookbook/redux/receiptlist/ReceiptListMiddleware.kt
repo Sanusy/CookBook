@@ -9,7 +9,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class ReceiptListMiddleware(private val receiptService: ReceiptService) : Middleware {
-    override fun apply(action: Action, store: Store) {
+    override fun apply(action: Action) {
         when (action) {
             LoadReceiptList -> {
                 launch {
@@ -17,7 +17,7 @@ class ReceiptListMiddleware(private val receiptService: ReceiptService) : Middle
                         receiptService.getReceipts().get()
                     }
 
-                    store.dispatch(ReceiptListLoaded(receiptListDto.results))
+                    Store.dispatch(ReceiptListLoaded(receiptListDto.results))
                 }
             }
             else -> return

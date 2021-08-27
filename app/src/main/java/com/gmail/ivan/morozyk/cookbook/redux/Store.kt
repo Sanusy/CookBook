@@ -2,12 +2,15 @@ package com.gmail.ivan.morozyk.cookbook.redux
 
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
+import com.gmail.ivan.morozyk.cookbook.navigation.NavigationManager
+import com.gmail.ivan.morozyk.cookbook.navigation.Routes
 import com.gmail.ivan.morozyk.cookbook.redux.base.Action
 import com.gmail.ivan.morozyk.cookbook.redux.base.Connector
 import com.gmail.ivan.morozyk.cookbook.redux.base.Middleware
 import com.gmail.ivan.morozyk.cookbook.redux.receiptlist.ReceiptListMiddleware
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
+import org.koin.core.component.inject
 import java.util.*
 
 // TODO: 26.08.2021 choose better name to ConnectorExecutor
@@ -18,14 +21,19 @@ object Store : KoinComponent {
     private val mainReducer: MainReducer = MainReducer()
     private val middlewares: List<Middleware> = listOf(ReceiptListMiddleware(get()))
     private val subscriptions: MutableList<ConnectorExecutor> = mutableListOf()
+    private val navigationManager: NavigationManager by inject()
 
     fun dispatch(action: Action) {
-        middlewares.forEach { middleware -> middleware.apply(action, this) }
+        middlewares.forEach { middleware -> middleware.apply(action) }
         val newState = mainReducer.reduce(state, action)
         if (state != newState) {
             state = newState
         }
         subscriptions.forEach { it.connect() }
+    }
+
+    fun navigate(route: Routes) {
+        navigationManager.navigate(route)
     }
 
     fun subscribe(connectorExecutor: ConnectorExecutor) {

@@ -40,7 +40,7 @@ data class ReceiptDto(
     val veryPopular: Boolean,
     val weightWatcherSmartPoints: Int,
     val winePairing: WinePairing,
-){
+) {
     @JsonClass(generateAdapter = true)
     data class AnalyzedInstruction(
         val name: String,
