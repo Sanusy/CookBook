@@ -5,5 +5,5 @@ data class ReceiptListState(
     val isLoading: Boolean = false,
     val receiptList: List<Receipt>? = null,
 ) {
-    data class Receipt(val id: Int, val title: String, val image: String,)
+    data class Receipt(val id: Int, val title: String, val image: String)
 }

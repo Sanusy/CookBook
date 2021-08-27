@@ -10,7 +10,7 @@ sealed class ReceiptListProps {
             val id: Int,
             val title: String,
             val image: String,
-            val onReceiptClick: Command.With<String>
+            val onReceiptClick: Command.With<Int>
         )
     }
 }
