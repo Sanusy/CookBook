@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">CookBook</string>
+
+    <!-- ReceiptList -->
+    <string name="receipt_list_tab_title">Search</string>
+
+    <!-- Collections -->
+    <string name="collection_tab_title">Collection</string>
+
+    <!-- Cart -->
+    <string name="cart_tab_title">Cart</string>
+
 </resources>
