@@ -18,6 +18,9 @@ class ReceiptListReducer : Reducer<ReceiptListState> {
             }
             state.copy(isLoading = false, receiptList = receipts)
         }
+        is OnQueryChanged -> {
+            state.copy(query = action.query)
+        }
         else -> state
     }
 }

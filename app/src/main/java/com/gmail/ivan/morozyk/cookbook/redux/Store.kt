@@ -24,7 +24,7 @@ object Store : KoinComponent {
     private val navigationManager: NavigationManager by inject()
 
     fun dispatch(action: Action) {
-        middlewares.forEach { middleware -> middleware.apply(action) }
+        middlewares.forEach { middleware -> middleware.apply(action, state) }
         val newState = mainReducer.reduce(state, action)
         if (state != newState) {
             state = newState

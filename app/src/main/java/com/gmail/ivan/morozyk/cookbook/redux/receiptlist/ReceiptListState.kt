@@ -2,6 +2,7 @@ package com.gmail.ivan.morozyk.cookbook.redux.receiptlist
 
 data class ReceiptListState(
     val offset: Int = 0,
+    val query: String = "",
     val isLoading: Boolean = false,
     val receiptList: List<Receipt>? = null,
 ) {

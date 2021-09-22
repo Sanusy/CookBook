@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.*
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
@@ -35,38 +36,22 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
 
             val navController = rememberNavController()
             navigationManager.attachNavController(navController)
+
             Store.dispatch(LoadReceiptList)//not sure if this is the right place to dispatch initial action
 
             CookBookTheme {
+                Column(modifier = Modifier.fillMaxSize()) {
 
-                Scaffold(bottomBar = {
-                    BottomNavigation {
-                        val navBackStackEntry by navController.currentBackStackEntryAsState()
-                        val currentDestination = navBackStackEntry?.destination
-
-                        bottomNavItems.forEach { screen ->
-                            BottomNavigationItem(
-                                icon = { Icon(screen.icon, contentDescription = null) },
-                                label = { Text(stringResource(screen.titleRes)) },
-                                selected = currentDestination?.hierarchy?.any { it.route == screen.route.name } == true,
-                                onClick = {
-                                    navController.navigate(screen.route.name) {
-                                        popUpTo(navController.graph.findStartDestination().id) {
-                                            saveState = true
-                                        }
-                                        launchSingleTop = true
-                                        restoreState = true
-                                    }
-                                }
-                            )
-                        }
-                    }
-                }) {
-                    Surface(color = MaterialTheme.colors.background) {
+                    Surface(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
+                    ) {
                         NavHost(
                             navController = navController,
                             startDestination = Routes.RECEIPT_LIST.name
@@ -96,6 +81,28 @@ class MainActivity : ComponentActivity() {
                                     Text("Cart")
                                 }
                             }
+                        }
+                    }
+
+                    BottomNavigation(modifier = Modifier.fillMaxWidth()) {
+                        val navBackStackEntry by navController.currentBackStackEntryAsState()
+                        val currentDestination = navBackStackEntry?.destination
+
+                        bottomNavItems.forEach { screen ->
+                            BottomNavigationItem(
+                                icon = { Icon(screen.icon, contentDescription = null) },
+                                label = { Text(stringResource(screen.titleRes)) },
+                                selected = currentDestination?.hierarchy?.any { it.route == screen.route.name } == true,
+                                onClick = {
+                                    navController.navigate(screen.route.name) {
+                                        popUpTo(navController.graph.findStartDestination().id) {
+                                            saveState = true
+                                        }
+                                        launchSingleTop = true
+                                        restoreState = true
+                                    }
+                                }
+                            )
                         }
                     }
                 }

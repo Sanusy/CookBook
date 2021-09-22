@@ -3,6 +3,8 @@ package com.gmail.ivan.morozyk.cookbook.ui.receiptlist
 import com.gmail.ivan.morozyk.cookbook.redux.Command
 import com.gmail.ivan.morozyk.cookbook.redux.Store
 import com.gmail.ivan.morozyk.cookbook.redux.base.Connector
+import com.gmail.ivan.morozyk.cookbook.redux.receiptlist.LoadReceiptList
+import com.gmail.ivan.morozyk.cookbook.redux.receiptlist.OnQueryChanged
 
 class ReceiptListConnector : Connector<ReceiptListProps> {
 
@@ -10,11 +12,18 @@ class ReceiptListConnector : Connector<ReceiptListProps> {
 
         val receiptListState = Store.state.receiptListState
 
-        if (receiptListState.isLoading) return ReceiptListProps.Loading
+        val toolBarProps = ReceiptListProps.ToolBarProps(
+            query = receiptListState.query,
+            onQueryChanged = Command.With { query -> Store.dispatch(OnQueryChanged(query)) },
+            onClearSearch = Command { Store.dispatch(OnQueryChanged("")) },
+            onSearchPerformed = Command { Store.dispatch(LoadReceiptList) }
+        )
+
+        if (receiptListState.isLoading) return ReceiptListProps.Loading(toolBarProps = toolBarProps)
 
         return when (receiptListState.receiptList.isNullOrEmpty()) {
             true -> {
-                ReceiptListProps.EmptyList
+                ReceiptListProps.EmptyList(toolBarProps = toolBarProps)
             }
             false -> {
                 val receiptList = receiptListState.receiptList.map { receipt ->
@@ -28,7 +37,7 @@ class ReceiptListConnector : Connector<ReceiptListProps> {
                     )
                 }
 
-                ReceiptListProps.ReceiptList(receiptList = receiptList)
+                ReceiptListProps.ReceiptList(receiptList = receiptList, toolBarProps = toolBarProps)
             }
         }
     }
