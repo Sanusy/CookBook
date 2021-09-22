@@ -1,4 +1,4 @@
-package com.gmail.ivan.morozyk.cookbook.ui.common
+package com.gmail.ivan.morozyk.cookbook.ui.widgets
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
